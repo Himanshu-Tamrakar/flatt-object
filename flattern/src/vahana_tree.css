@@ -1,0 +1,125 @@
+.tree ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.tree li {
+    position: relative;
+    z-index: 1;
+}
+.tree>div>ul>li>div:before {
+    display: none;
+}
+.tree li ul {
+    margin-left: 20px;
+}
+.tree li ul li>div a {
+    min-width: 132px;
+}
+.tree li li ul li>div a {
+    min-width: 112px;
+}
+.tree li li li ul li>div a {
+    min-width: 92px;
+}
+.tree li>div {
+    display: flex;
+    place-content: center space-between;
+    align-items: center;
+    padding: 2px 0;
+}
+.tree li>div select {
+    border: 1px solid #dfe1e6;
+    background: #fff;
+    border-radius: 4px;
+    min-width: 136px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    font-size: 11px;
+    color: #253858;
+    line-height: 18px;
+}
+.tree li>div .copyPath {
+    visibility: hidden;
+    color: #2883f3 !important;
+    cursor: pointer;
+}
+.tree li>div:hover .copyPath {
+    visibility: visible;
+}
+.tree li a {
+    min-width: 152px;
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+    color: #505f79;
+    text-decoration: none;
+    line-height: 20px;
+    text-transform: capitalize;
+}
+.tree li>div:after {
+    border-left: 1px dashed #b3bac5;
+    width: 1px;
+    height: calc(100% - 24px);
+    content: '';
+    position: absolute;
+    left: 6px;
+    bottom: 16px;
+    z-index: 1;
+}
+.tree li>div:before {
+    border-top: 1px dashed #b3bac5;
+    width: 12px;
+    height: 1px;
+    content: '';
+    position: absolute;
+    right: 100%;
+    top: 12px;
+    z-index: 1;
+}
+.tree li a .icon {
+    background-color: #6b778c;
+    width: 12px;
+    height: 12px;
+    margin-right: 8px;
+    text-align: center;
+    font-size: 11px;
+    color: #fff !important;
+    line-height: 13px;
+    font-weight: bold;
+    border-radius: 2px;
+    display: block;
+    position: relative;
+    z-index: 2;
+}
+.tree li a .fa:before {
+    color: #fff;
+}
+.tree li a span {
+    background-color: #ebecf0;
+    width: 12px;
+    height: 12px;
+    margin-right: 8px;
+    border-radius: 2px;
+    display: flex;
+    place-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+.tree li a span.number {
+    background-color: #36b37e;
+}
+.tree li a span.number:before {
+    display: block;
+    padding-right: 2px;
+    content: 'e';
+    text-align: center;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: lowercase;
+    font-style: italic;
+    line-height: 10px;
+}

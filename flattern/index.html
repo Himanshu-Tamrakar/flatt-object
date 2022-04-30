@@ -1,0 +1,170 @@
+<html>
+
+<head>
+    <title>VAHANA Tree</title>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="src/vahana_tree.css">
+
+    <script src="src/temp.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-4">
+            <div id="div_tree" class="tree"></div>
+
+        </div>
+        <input type="button" onclick="getJSONData()" value="Get Data" />
+    </div>
+
+
+    <script>
+
+        const tree = new VahanaTree({
+            vah_target: 'div_tree',
+            rowCreateCallback: (node) => {
+                // console.log(node)
+            },
+            switchCallback: (node) => {
+                // console.log(node)
+            },
+            drawCallback: () => {
+                console.log('tree drawed ..');
+            },
+            vah_config: {
+                //start as folded or unfolded
+                foldedStatus: false,
+                //for logging
+                logMode: false,
+                //for selection checkbox element mode
+                switchMode: false,
+                //for automaticly select childs
+                autoChild: false,
+                //for automaticly select parents
+                autoParent: false,
+                //allow copy option
+                copyPath: true,
+                // draw elements
+                drawElements: true,
+                dataPath: "dataType",
+                flattenJSON: true
+            },
+            vah_elements: [{
+                label: "Data Type",
+                displayLabel: false,
+                key: "data_type",
+                type: "input",
+                value: ["Integer", "Float", "String"]
+            }],
+            vah_json_data: {
+                "author": {
+                    "lastname": "Doe",
+                },
+                "title": "The Ultimate Database Study Guide",
+                "category": [{"name": "xyz"}, {"name": "abc"}],
+                "array1": ["himanshu", "tamrakar", {"firstName": "HIMAN"}]
+            }
+
+        });
+
+        function getJSONData() {
+            // console.log(tree);
+            prepareRequest(tree.makeObj1(tree.data.flatten, {}), tree.makeObj(tree.data.flatten, {}))
+
+
+            // let data = tree.data;
+            // data.forEach(ele => {
+            //     if (ele.Child) {
+            //         delete ele.Child;
+            //     }
+            // });
+            // console.log("flaten data", data);
+        }
+
+        function prepareRequest(pathObj, valueObj) {
+
+            var request = {
+                "id": "fetchGroupCycles",
+                "type": "Api",
+                "connectionId": "api2Connection",
+                "request": {
+                    "filterChain": [
+                        {
+                            "type": "PwcRegistration"
+                        },
+                        {
+                            "type": "PwcRequestTransformation",
+                            "subProperties": {
+                                "scope": "user",
+                                "serviceName": "FETCH_GROUPS_CYCLES"
+                            }
+                        },
+                        {
+                            "type": "PwcHash"
+                        }
+                    ],
+                    "header": {},
+                    "body": {
+                        "template": pathObj.unflatten,
+                        "params": {}
+                    }
+                },
+                "response": {
+                    "filterChain": [
+                        {
+                            "type": "PwcResponseParser",
+                            "subProperties": {
+                                "apiName": "FETCH_GROUPS_CYCLES"
+                            }
+                        }
+                    ]
+                }
+            }
+
+            // console.log(pathObj, valueObj, request);
+            prepareParam(request.request.body.params, pathObj.unflatten, valueObj.unflatten);
+            console.log(request);
+        }
+
+        function prepareParam(params, pathObj, valueObj) {
+            if (pathObj.constructor.name == 'Object') {
+                var keys = Object.keys(pathObj);
+
+                keys.forEach(function (key) {
+
+                    if (pathObj[key].constructor.name == 'String') {
+                        params[pathObj[key].substring(1)] = {
+                            "evaluationType": "data",
+                            "value": valueObj[key]
+                        }
+                    } else if (pathObj[key].constructor.name == 'Object' || pathObj[key].constructor.name == 'Array') {
+                        prepareParam(params, pathObj[key], valueObj[key])
+                    }
+                })
+
+            } else if (pathObj.constructor.name == 'Array') {
+
+                pathObj.forEach(function (value, index) {
+                    console.log(index, value);
+                    if (value.constructor.name == 'String') {
+                        params[pathObj[key].substring(1)] = {
+                            "evaluationType": "data",
+                            "value": valueObj[key]
+                        }
+                    } else if (value.constructor.name == 'Object' || value.constructor.name == 'Array') {
+                        prepareParam(params, value, valueObj[index])
+                    }
+                })
+
+
+            }
+        }
+
+    </script>
+
+</body>
+
+
+
+</html>
